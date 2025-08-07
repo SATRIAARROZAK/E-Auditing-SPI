@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/_header :: header('Akses Ditolak')}"></head>
+<body class="bg-light">
+<div class="container text-center">
+    <div class="row justify-content-center align-items-center vh-100">
+        <div class="col-md-6">
+            <div class="card border-danger shadow-sm">
+                <div class="card-body p-5">
+                    <h1 class="display-1 text-danger">403</h1>
+                    <h2 class="card-title">Akses Ditolak</h2>
+                    <p class="card-text">Maaf, Anda tidak memiliki izin untuk mengakses halaman ini.</p>
+                    <a th:href="@{/dashboard}" class="btn btn-primary">Kembali ke Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/_footer :: footer}"></div>
+</body>
+</html>

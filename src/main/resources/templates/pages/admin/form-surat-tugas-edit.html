@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/_header :: header('Edit Surat Tugas')}"></head>
+
+<body>
+    <div th:replace="~{fragments/_navbar :: navbar}"></div>
+    <main class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Form Edit Surat Tugas</h2>
+                        <span th:if="${surat.status == T(Audit.Auditing.model.StatusSuratTugas).DIKEMBALIKAN_KE_ADMIN}" class="badge bg-warning text-dark mt-2">
+                            Surat ini dikembalikan untuk revisi. Catatan: <span th:text="${surat.catatanPersetujuan}"></span>
+                        </span>
+                        <span th:if="${surat.status == T(Audit.Auditing.model.StatusSuratTugas).DITOLAK}" class="badge bg-danger mt-2">
+                            Surat ini DITOLAK. Catatan: <span th:text="${surat.catatanPersetujuan}"></span>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/surat-tugas/update/{id}(id=${suratId})}" th:object="${suratTugasDTO}"
+                            method="post" enctype="multipart/form-data">
+
+                            <div class="mb-3">
+                                <label for="nomorSurat" class="form-label">Nomor Surat:</label>
+                                <input type="text" id="nomorSurat" class="form-control" th:field="*{nomorSurat}" required />
+                                <div th:if="${#fields.hasErrors('nomorSurat')}" th:errors="*{nomorSurat}" class="text-danger small mt-1"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="deskripsiSurat" class="form-label">Deskripsi Surat (Opsional):</label>
+                                <textarea id="deskripsiSurat" class="form-control" rows="3" th:field="*{deskripsiSurat}"></textarea>
+                                <div th:if="${#fields.hasErrors('deskripsiSurat')}" th:errors="*{deskripsiSurat}" class="text-danger small mt-1"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="jenisAudit" class="form-label">Jenis Audit:</label>
+                                <select id="jenisAudit" class="form-select" th:field="*{jenisAudit}" required>
+                                    <option value="">Pilih Jenis Audit</option>
+                                    <option th:each="jenis : ${jenisAuditOptions}" th:value="${jenis}" th:text="${jenis.displayName}"></option>
+                                </select>
+                                <div th:if="${#fields.hasErrors('jenisAudit')}" th:errors="*{jenisAudit}" class="text-danger small mt-1"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tanggalMulaiAudit" class="form-label">Tanggal Mulai Audit:</label>
+                                <input type="date" class="form-control" id="tanggalMulaiAudit" name="tanggalMulaiAudit" th:field="*{tanggalMulaiAudit}" required>
+                                <div th:if="${#fields.hasErrors('tanggalMulaiAudit')}" th:errors="*{tanggalMulaiAudit}" class="text-danger small mt-1"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tanggalSelesaiAudit" class="form-label">Tanggal Selesai Audit:</label>
+                                <input type="date" class="form-control" id="tanggalSelesaiAudit" name="tanggalSelesaiAudit" th:field="*{tanggalSelesaiAudit}" required>
+                                <div th:if="${#fields.hasErrors('tanggalSelesaiAudit')}" th:errors="*{tanggalSelesaiAudit}" class="text-danger small mt-1"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="suratFile" class="form-label">Upload File Surat Baru (Opsional):</label>
+                                <input type="file" id="suratFile" class="form-control" th:field="*{suratFile}"
+                                    accept=".pdf,.doc,.docx" />
+                                <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah file
+                                    surat.</small>
+                                <div th:if="${#fields.hasErrors('suratFile')}" th:errors="*{suratFile}"
+                                    class="text-danger small mt-1"></div>
+                                <div th:if="${surat.filePath != null}" class="mt-2">
+                                    File saat ini: <a th:href="@{'/profile-photos/' + ${surat.filePath}}" target="_blank">Lihat File</a>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="ketuaTimId" class="form-label">Ketua Tim:</label>
+                                <select id="ketuaTimId" class="form-select" th:field="*{ketuaTimId}" required>
+                                    <option value="">Pilih Ketua Tim</option>
+                                    <option th:each="p : ${pegawai}" th:value="${p.id}"
+                                        th:text="${p.fullName ?: p.username}"
+                                        th:selected="${p.id == suratTugasDTO.ketuaTimId}"></option>
+                                </select>
+                                <div th:if="${#fields.hasErrors('ketuaTimId')}" th:errors="*{ketuaTimId}"
+                                    class="text-danger small mt-1"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="anggotaTimIds" class="form-label">Anggota Tim:</label>
+                                <select id="anggotaTimIds" th:field="*{anggotaTimIds}" multiple required>
+                                    <option th:each="p : ${pegawai}" th:value="${p.id}"
+                                        th:text="${p.fullName ?: p.username}"
+                                        th:selected="${suratTugasDTO.anggotaTimIds.contains(p.id)}"></option>
+                                </select>
+                                <div th:if="${#fields.hasErrors('anggotaTimIds')}" th:errors="*{anggotaTimIds}"
+                                    class="text-danger small mt-1"></div>
+                            </div>
+                            <button type="submit" class="btn btn-success">Update Surat Tugas</button>
+                            <a th:href="@{/admin/surat-tugas/list}" class="btn btn-secondary">Batal</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{fragments/_footer :: footer}"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ketuaSelect = document.getElementById('ketuaTimId');
+            
+            const tomSelect = new TomSelect('#anggotaTimIds', {
+                plugins: ['remove_button'],
+                create: false,
+                placeholder: 'Cari dan pilih anggota...',
+            });
+
+            function updateAnggotaOptions() {
+                const selectedKetuaId = ketuaSelect.value;
+                Object.keys(tomSelect.options).forEach(key => tomSelect.enableOption(key));
+                if (selectedKetuaId) {
+                    tomSelect.removeItem(selectedKetuaId);
+                    tomSelect.disableOption(selectedKetuaId);
+                }
+            }
+            ketuaSelect.addEventListener('change', updateAnggotaOptions);
+            updateAnggotaOptions();
+        });
+    </script>
+</body>
+
+</html>
