@@ -53,7 +53,7 @@ public class AdminController {
 
         userService.saveUser(userDto);
         redirectAttributes.addFlashAttribute("successMessage", "User baru berhasil ditambahkan!");
-        return "redirect:/admin/users/list";
+        return "redirect:/pages/admin/users/list";
     }
 
     @GetMapping("/users/list")
