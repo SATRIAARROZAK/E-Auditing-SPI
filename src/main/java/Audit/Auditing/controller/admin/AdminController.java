@@ -48,12 +48,12 @@ public class AdminController {
 
         if (result.hasErrors()) {
             model.addAttribute("availableRoles", availableRoles);
-            return "pages/admin/add-user";
+            return "admin/add-user";
         }
 
         userService.saveUser(userDto);
         redirectAttributes.addFlashAttribute("successMessage", "User baru berhasil ditambahkan!");
-        return "redirect:/pages/admin/users/list";
+        return "redirect:/admin/users/list";
     }
 
     @GetMapping("/users/list")
@@ -128,7 +128,7 @@ public class AdminController {
 
         userService.updateUser(id, userDto);
         redirectAttributes.addFlashAttribute("successMessage", "User berhasil diupdate!");
-        return "redirect:/pages/admin/users/list";
+        return "redirect:/admin/users/list";
     }
 
     @GetMapping("/users/delete/{id}")
@@ -139,6 +139,6 @@ public class AdminController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Gagal menghapus user. " + e.getMessage());
         }
-        return "redirect:/pages/admin/users/list";
+        return "redirect:/admin/users/list";
     }
 }
