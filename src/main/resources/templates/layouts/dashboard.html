@@ -3,57 +3,37 @@
 
 <head th:replace="~{fragments/_header :: header('Beranda')}"></head>
 
-<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
-    <!--begin::App Wrapper-->
+<body class="layout-fixed sidebar-expand-lg sidebar-mini bg-body-tertiary">
     <div class="app-wrapper">
-        <!--begin::Header-->
         <div th:replace="~{fragments/_navbar :: navbar}"></div>
-        <!--end::Header-->
-
         <div th:replace="~{fragments/_sidebar :: sidebar}"></div>
-        <!--begin::Sidebar-->
 
-        <!--begin::App Main-->
         <main class="app-main">
-            <!--begin::App Content Header-->
-            <div class="app-content-header" layout:fragment="content">
-                <!--begin::Container-->
+            <div class="app-content-header">
                 <div class="container-fluid">
-                    <!--begin::Row-->
-                    <!-- <div class="row">
+                    <div class="row">
                         <div class="col-sm-6">
-                            <h3 class="mb-0">Dashboard v2</h3>
+                            <div layout:fragment="page-title">
+                                <h3 class="mb-0">Beranda</h3>
+                            </div>
                         </div>
                         <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-end">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Dashboard v2</li>
+                            <ol class="breadcrumb float-sm-end" layout:fragment="breadcrumb">
+                                <li class="breadcrumb-item"><a th:href="@{/dashboard}">Beranda</a></li>
                             </ol>
                         </div>
-                    </div> -->
-                    <!--end::Row-->
+                    </div>
                 </div>
-                <!--end::Container-->
             </div>
-            <div layout:fragment="content" class="app-content">
 
-
+            <div class="app-content" layout:fragment="content">
             </div>
-            <!--end::App Content-->
         </main>
-        <!--end::App Main-->
-        <!--begin::Footer-->
+
         <div th:replace="~{fragments/_footer :: footer}"></div>
     </div>
-    <!--end::App Wrapper-->
-    <!--begin::Script-->
+
     <div th:replace="~{fragments/_scripts :: scripts}"></div>
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-
-
-
 </body>
-<!--end::Body-->
-
 
 </html>

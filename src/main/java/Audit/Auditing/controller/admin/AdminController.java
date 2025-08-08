@@ -40,20 +40,20 @@ public class AdminController {
             BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (userService.findByUsername(userDto.getUsername()).isPresent()) {
-            result.rejectValue("username", "username.exists", "Username sudah digunakan");
+            result.rejectValue("username", "username.exists", "Username Sudah Digunakan!");
         }
         if (userService.findByEmail(userDto.getEmail()).isPresent()) {
-            result.rejectValue("email", "email.exists", "Email sudah digunakan");
+            result.rejectValue("email", "email.exists", "Email Sudah Terpakai!");
         }
 
         if (result.hasErrors()) {
             model.addAttribute("availableRoles", availableRoles);
-            return "admin/add-user";
+            return "pages/admin/add-user";
         }
 
         userService.saveUser(userDto);
-        redirectAttributes.addFlashAttribute("successMessage", "User baru berhasil ditambahkan!");
-        return "redirect:/pages/admin/users/list";
+        redirectAttributes.addFlashAttribute("successMessage", "Pengguna Berhasil Di Tambahkan!");
+        return "redirect:/admin/users/list";
     }
 
     @GetMapping("/users/list")
@@ -90,7 +90,7 @@ public class AdminController {
     public String showEditUserForm(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
         Optional<User> userOptional = userService.findById(id);
         if (userOptional.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "User tidak ditemukan.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Pengguna Tidak Terdaftar!.");
             return "redirect:/admin/users/list";
         }
         User user = userOptional.get();
@@ -112,12 +112,12 @@ public class AdminController {
 
         Optional<User> existingUserByUsername = userService.findByUsername(userDto.getUsername());
         if (existingUserByUsername.isPresent() && !existingUserByUsername.get().getId().equals(id)) {
-            result.rejectValue("username", "username.exists", "Username sudah digunakan oleh user lain.");
+            result.rejectValue("username", "username.exists", "Username Sudah Digunakan!.");
         }
 
         Optional<User> existingUserByEmail = userService.findByEmail(userDto.getEmail());
         if (existingUserByEmail.isPresent() && !existingUserByEmail.get().getId().equals(id)) {
-            result.rejectValue("email", "email.exists", "Email sudah digunakan oleh user lain.");
+            result.rejectValue("email", "email.exists", "Email Sudah Terpakai!.");
         }
 
         if (result.hasErrors()) {
@@ -127,7 +127,7 @@ public class AdminController {
         }
 
         userService.updateUser(id, userDto);
-        redirectAttributes.addFlashAttribute("successMessage", "User berhasil diupdate!");
+        redirectAttributes.addFlashAttribute("successMessage", "Pengguna Berhasil Diubah!");
         return "redirect:/admin/users/list";
     }
 
@@ -135,9 +135,9 @@ public class AdminController {
     public String deleteUser(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             userService.deleteUser(id);
-            redirectAttributes.addFlashAttribute("successMessage", "User berhasil dihapus.");
+            redirectAttributes.addFlashAttribute("successMessage", "Pengguna Berhasil Di Hapus!.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Gagal menghapus user. " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal Menghapus Pengguna!. " + e.getMessage());
         }
         return "redirect:/admin/users/list";
     }

@@ -1,118 +1,112 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
 
 <head th:replace="~{fragments/_header :: header('Data Pengguna')}"></head>
 
 <body>
-    <!-- <div th:replace="~{fragments/_navbar :: navbar}"></div>
-    <div th:replace="~{fragments/_sidebar :: sidebar}"></div> -->
-
-
-
-
-    <div class="app-content-header" layout:fragment="content">
-        <div class="container-fluid">
-            <!--begin::Row-->
-            <div class="row">
-                <div class="col-sm-6">
-                    <h3 class="mb-0">Data Pengguna</h3>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-end">
-                        <li class="breadcrumb-item"><a th:href="@{/dashboard}">Beranda</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Data Pengguna</li>
-                    </ol>
-                </div>
-            </div>
-            <!--end::Row-->
-        </div>
+    <div layout:fragment="page-title">
+        <h3 class="mb-0">Data Pengguna</h3>
     </div>
 
-
-
-    <!--begin::Row-->
-    <div layout:fragment="content" class="app-content">
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h3 class="card-title">Bordered Table</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Jabatan</th>
-                                    <th>No. Telepon</th>
-                                    <th>Role</th>
-                                    <th>Status Profil</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="align-middle">
-                                    <td th:text="${(currentPage * pageSize) + iterStat.count}"></td>
-                                    <td th:text="${user.username}"></td>
-                                    <td th:text="${user.email}"></td>
-                                    <td th:text="${user.fullName ?: '-'}"></td>
-                                    <td th:text="${user.position ?: '-'}"></td>
-                                    <td th:text="${user.phoneNumber ?: '-'}"></td>
-                                    <td><span class="badge bg-info" th:text="${user.role}"></span></td>
-                                    <td>
-                                        <span th:if="${user.profileComplete}" class="badge bg-success">Lengkap</span>
-                                        <span th:unless="${user.profileComplete}"
-                                            class="badge bg-warning text-dark">Belum
-                                            Lengkap</span>
-                                    </td>
-                                    <td>
-                                        <a th:href="@{/admin/users/edit/{id}(id=${user.id})}"
-                                            class="btn btn-outline-warning" title="Edit User"> <i
-                                                class="bi bi-pencil-square"></i></a>
-                                        <a th:href="@{/admin/users/delete/{id}(id=${user.id})}"
-                                            class="btn btn-outline-danger"
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?');"
-                                            title="Hapus User"><i class="bi bi-trash3-fill"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="card-footer clearfix">
-                        <ul class="pagination pagination-sm m-0 float-end">
-                            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}"><a
-                                    class="page-link"
-                                    th:href="@{/admin/users/list(page=${currentPage - 1}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir}, keyword=${keyword})}">&laquo;</a>
-                            </li>
-                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                                th:classappend="${i == currentPage ? 'active' : ''}"><a class="page-link"
-                                    th:href="@{/admin/users/list(page=${i}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir}, keyword=${keyword})}"
-                                    th:text="${i + 1}"></a>
-                            </li>
-                            <li class="page-item" h:classappend="${currentPage + 1 == totalPages ? 'disabled' : ''}"><a
-                                    class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link"
-                                    th:href="@{/admin/users/list(page=${currentPage + 1}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir}, keyword=${keyword})}">&raquo;</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#"></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div layout:fragment="breadcrumb">
+        <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a th:href="@{/dashboard}">Beranda</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Data Pengguna</li>
+        </ol>
     </div>
 
-    <!--end::Row-->
+    <div layout:fragment="content">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
+        <div class="card mb-4">
+            <div class="card-header">
+                <div
+                    class="d-flex flex-column-reverse flex-md-row justify-content-md-between align-items-md-center gap-2 mb-3">
+                    <form th:action="@{/admin/users/list}" method="get" class="d-flex"
+                        style="width: 100%; max-width: 450px;">
+                        <input type="text" name="keyword" class="form-control me-2"
+                            placeholder="Cari Pengguna" th:value="${keyword}" aria-label="Search" />
+                        <button type="submit" class="btn btn-outline-info">Cari</button>
+                        <a th:href="@{/admin/users/list}" class="btn btn-outline-danger ms-2"
+                            title="Reset Pencarian">Reset</a>
+                    </form>
 
+                    <a th:href="@{/admin/users/add}" class="btn btn-primary">
+                        <i class="bi bi-person-fill-add me-1"></i>Tambah Data
+                    </a>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive">
+                <table class="table table-bordered-responsive">
+                    <thead>
+                        <tr class="align-middle">
+                            <th>No</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Nama Lengkap</th>
+                            <th>Jabatan</th>
+                            <th>No. Telepon</th>
+                            <th>Role</th>
+                            <th>Status Profil</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="align-middle" th:each="user, iterStat : ${users}">
+                            <td th:text="${(currentPage * pageSize) + iterStat.count}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.fullName ?: '-'}"></td>
+                            <td th:text="${user.position ?: '-'}"></td>
+                            <td th:text="${user.phoneNumber ?: '-'}"></td>
+                            <td><span class="badge bg-info" th:text="${user.role}"></span></td>
+                            <td>
+                                <span th:if="${user.profileComplete}" class="badge bg-success">Lengkap</span>
+                                <span th:unless="${user.profileComplete}" class="badge bg-warning text-dark">Belum
+                                    Lengkap</span>
+                            </td>
+                            <td>
+                                <a th:href="@{/admin/users/edit/{id}(id=${user.id})}" class="btn btn-outline-warning"
+                                    title="Edit User"> <i class="bi bi-pencil-square"></i></a>
+                                <a th:href="@{/admin/users/delete/{id}(id=${user.id})}" class="btn btn-outline-danger"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?');"
+                                    title="Hapus User"><i class="bi bi-trash3-fill"></i></a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(users)}">
+                            <td colspan="9" class="text-center">Tidak ada data user.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+                <ul class="pagination pagination-sm m-0 float-end">
+                    <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}"><a class="page-link"
+                            th:href="@{/admin/users/list(page=${currentPage - 1}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir}, keyword=${keyword})}">&laquo;</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${i == currentPage ? 'active' : ''}"><a class="page-link"
+                            th:href="@{/admin/users/list(page=${i}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir}, keyword=${keyword})}"
+                            th:text="${i + 1}">1</a></li>
+                    <li class="page-item" th:classappend="${currentPage + 1 == totalPages ? 'disabled' : ''}"><a
+                            class="page-link"
+                            th:href="@{/admin/users/list(page=${currentPage + 1}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir}, keyword=${keyword})}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-    <div th:replace="~{fragments/_footer :: footer}"></div>
+    </div>
 </body>
 
 </html>

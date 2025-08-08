@@ -26,10 +26,16 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                                                // .requestMatchers("/css/**", "/js/**", "/img/**", "/vendor/**",
+                                                //                 "/fonts/**")
+                                                // .permitAll()
                                                 // Izinkan akses ke URL publik
-                                                .requestMatchers("/login", "/register", "/css/**", "/js/**", "/error",
-                                                                "/profile/edit", "/profile/update",
-                                                                "/profile-photos/**", "/pdf/**") // <-- TAMBAHKAN INI
+                                                .requestMatchers("/login", "/register", "/css/**", "/error",
+                                                                "/profile/edit", "/profile/update", "/css/**", "/js/**",
+                                                                "/img/**", "/vendor/**",
+                                                                "/fonts/**", "/profile-photos/**", "/pdf/**") // <--
+                                                                                                              // TAMBAHKAN
+                                                                                                              // INI
                                                 .permitAll()
                                                 .requestMatchers("/api/**").authenticated() // <-- TAMBAHKAN BARIS INI
 
