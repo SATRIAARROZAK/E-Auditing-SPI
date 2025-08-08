@@ -20,7 +20,7 @@
                 <!--begin::Container-->
                 <div class="container-fluid">
                     <!--begin::Row-->
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-sm-6">
                             <h3 class="mb-0">Dashboard v2</h3>
                         </div>
@@ -30,7 +30,7 @@
                                 <li class="breadcrumb-item active" aria-current="page">Dashboard v2</li>
                             </ol>
                         </div>
-                    </div>
+                    </div> -->
                     <!--end::Row-->
                 </div>
                 <!--end::Container-->
@@ -49,6 +49,9 @@
     <!--begin::Script-->
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
   
+     <div th:replace="~{fragments/_footer :: footer}"></div>
+    <div th:replace="~{fragments/_scripts :: scripts}"></div>
+     
 </body>
 <!--end::Body-->
 
