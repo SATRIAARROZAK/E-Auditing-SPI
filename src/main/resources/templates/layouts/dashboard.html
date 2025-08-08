@@ -43,29 +43,17 @@
         </main>
         <!--end::App Main-->
         <!--begin::Footer-->
-       
-    </div>
-    <!--end::App Wrapper-->
-    <!--begin::Script-->
+          <div th:replace="~{fragments/_footer :: footer}"></div>
+        </div>
+        <!--end::App Wrapper-->
+        <!--begin::Script-->
+        <div th:replace="~{fragments/_scripts :: scripts}"></div>
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
   
-     <div th:replace="~{fragments/_footer :: footer}"></div>
-    <div th:replace="~{fragments/_scripts :: scripts}"></div>
+  
      
 </body>
 <!--end::Body-->
 
-<!-- <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-    <div class="app-wrapper">
-        <div th:replace="~{fragments/_navbar :: navbar}"></div>
-        <div th:replace="~{fragments/_sidebar :: sidebar}"></div>
-
-    </div>
-
-    <div th:replace="~{fragments/_footer :: footer}"></div>
-
-
-    end::Script
-</body> -->
 
 </html>
