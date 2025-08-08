@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head th:replace="~{fragments/_header :: header('Beranda')}"></head>
 
@@ -9,14 +9,14 @@
         <!--begin::Header-->
         <div th:replace="~{fragments/_navbar :: navbar}"></div>
         <!--end::Header-->
-       
+
         <div th:replace="~{fragments/_sidebar :: sidebar}"></div>
         <!--begin::Sidebar-->
-       
+
         <!--begin::App Main-->
         <main class="app-main">
             <!--begin::App Content Header-->
-            <div class="app-content-header">
+            <div class="app-content-header" layout:fragment="content">
                 <!--begin::Container-->
                 <div class="container-fluid">
                     <!--begin::Row-->
@@ -35,23 +35,23 @@
                 </div>
                 <!--end::Container-->
             </div>
-            <div class="app-content">
-                
-                
+            <div layout:fragment="content" class="app-content">
+
+
             </div>
             <!--end::App Content-->
         </main>
         <!--end::App Main-->
         <!--begin::Footer-->
-          <div th:replace="~{fragments/_footer :: footer}"></div>
-        </div>
-        <!--end::App Wrapper-->
-        <!--begin::Script-->
-        <div th:replace="~{fragments/_scripts :: scripts}"></div>
+        <div th:replace="~{fragments/_footer :: footer}"></div>
+    </div>
+    <!--end::App Wrapper-->
+    <!--begin::Script-->
+    <div th:replace="~{fragments/_scripts :: scripts}"></div>
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
-  
-  
-     
+
+
+
 </body>
 <!--end::Body-->
 
