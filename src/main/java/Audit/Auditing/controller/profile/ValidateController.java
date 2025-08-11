@@ -43,7 +43,7 @@ public class ValidateController {
         model.addAttribute("isFirstTime", !user.isProfileComplete());
         model.addAttribute("user", user); // Tambahkan objek user ke model
 
-        return "pages/account/edit-profile";
+        return "pages/account/validate-profile";
     }
 
     @PostMapping("/update")
@@ -60,7 +60,7 @@ public class ValidateController {
                 model.addAttribute("user", user);
                 model.addAttribute("isFirstTime", !user.isProfileComplete());
             }
-            return "pages/account/edit-profile";
+            return "pages/account/validate-profile";
         }
         try {
             userService.updateProfile(principal.getName(), profileDto);
