@@ -1,4 +1,4 @@
-package Audit.Auditing.controller;
+package Audit.Auditing.controller.profile;
 
 import Audit.Auditing.dto.ProfileDto;
 import Audit.Auditing.model.User;
@@ -43,7 +43,7 @@ public class ProfileController {
         model.addAttribute("isFirstTime", !user.isProfileComplete());
         model.addAttribute("user", user); // Tambahkan objek user ke model
 
-        return "edit-profile";
+        return "pages/account/edit-profile";
     }
 
     @PostMapping("/update")
@@ -60,7 +60,7 @@ public class ProfileController {
                 model.addAttribute("user", user);
                 model.addAttribute("isFirstTime", !user.isProfileComplete());
             }
-            return "edit-profile";
+            return "pages/account/edit-profile";
         }
         try {
             userService.updateProfile(principal.getName(), profileDto);
