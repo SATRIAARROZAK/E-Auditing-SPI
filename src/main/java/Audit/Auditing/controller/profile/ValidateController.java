@@ -18,7 +18,7 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/profile")
-public class ProfileController {
+public class ValidateController {
 
     @Autowired
     private UserService userService;
