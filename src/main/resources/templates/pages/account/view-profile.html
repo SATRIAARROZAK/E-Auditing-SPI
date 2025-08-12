@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head th:replace="~{fragments/_header :: header('Lihat Profile')}"></head>
+
+<body>
+    <div layout:fragment="page-title">
+        <h3 class="mb-0">Profile</h3>
+    </div>
+
+    <div layout:fragment="breadcrumb">
+        <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a th:href="@{/dashboard}">Beranda</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Profile</li>
+        </ol>
+    </div>
+
+    <div layout:fragment="content">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <img class="user-image rounded-circle shadow"
+                            th:if="${#authentication.principal.user.photoPath}"
+                            th:src="@{'/profile-photos/' + ${#authentication.principal.user.photoPath}}"
+                            alt="User profile picture" style="width: 180px; height: 220px; object-fit: cover;">
+                        <h3 class="profile-username text-center mt-2" th:text="${user.fullName}">Nama Lengkap</h3>
+                        <p class=" badge bg-primary text-center mt-2" th:text="${user.position}">Jabatan</p>
+                    </div>
+
+                    <div class="col-md-9">
+
+                        <form>
+                            <!--begin::Body-->
+                            <div class="card-body">
+                                <!--begin::Row-->
+                                <div class="row g-3">
+                                    <!--begin::Col-->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Peran</label>
+                                        <input class="form-control" th:value="${user.role}" disabled />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Username</label>
+                                        <input class="form-control" th:value="${user.username}" disabled />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input class="form-control" th:value="${user.email}" disabled />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">No Telp</label>
+                                        <input class="form-control" th:value="${user.phoneNumber}" disabled />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Alamat</label>
+                                        <textarea class="form-control" th:text="${user.address ?: 'Alamat belum diisi.'}" disabled></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <a th:href="@{/profile/edit}" class="btn btn-outline-warning"><b>Edit Profil</b></a>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

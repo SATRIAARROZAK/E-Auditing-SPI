@@ -27,6 +27,17 @@
             callback();
         }
     };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const alertElements = document.querySelectorAll('.alert');
+        alertElements.forEach(function (alert) {
+            setTimeout(function () {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    });
+
     /* SLIDE UP */
     const slideUp = (target, duration = 500) => {
         target.style.transitionProperty = 'height, margin, padding';

@@ -106,12 +106,12 @@
                 </li>
                 <!--end::Notifications Dropdown Menu-->
                 <!--begin::Fullscreen Toggle-->
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#" data-lte-toggle="fullscreen">
                         <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
                         <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
                     </a>
-                </li>
+                </li> -->
                 <!--end::Fullscreen Toggle-->
                 <!--begin::User Menu Dropdown-->
                 <li class="nav-item dropdown user-menu">
@@ -137,19 +137,19 @@
                         </li>
                         <!--end::User Image-->
                         <!--begin::Menu Body-->
-                        <li class="user-body">
+                        <!-- <li class="user-body"> -->
                             <!--begin::Row-->
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-4 text-center"><a href="#">Followers</a></div>
                                 <div class="col-4 text-center"><a href="#">Sales</a></div>
                                 <div class="col-4 text-center"><a href="#">Friends</a></div>
-                            </div>
+                            </div> -->
                             <!--end::Row-->
-                        </li>
+                        <!-- </li> -->
                         <!--end::Menu Body-->
                         <!--begin::Menu Footer-->
                         <li class="user-footer">
-                            <a th:href="@{/profile/edit}" class="btn btn-default btn-flat">Profile</a>
+                            <a th:href="@{/profile/view}" class="btn btn-primary btn-flat">Profile</a>
                             <form th:action="@{/logout}" method="post" class="d-inline">
                                 <button type="submit" class="btn btn-danger btn-flat float-end">
                                     <i class="bi bi-power me-1"></i> Sign out
