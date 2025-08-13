@@ -27,7 +27,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (user != null && !user.isProfileComplete()) {
             // Jika profil belum lengkap, arahkan ke halaman edit profil
-            getRedirectStrategy().sendRedirect(request, response, "/profile/edit");
+            getRedirectStrategy().sendRedirect(request, response, "/profile/validate");
         } else {
             // Jika sudah lengkap, arahkan ke dashboard
             super.setDefaultTargetUrl("/dashboard");

@@ -28,6 +28,138 @@
         }
     };
 
+    // validate account
+    document.addEventListener('DOMContentLoaded', function () {
+        const canvas = document.getElementById('signature-canvas');
+        const hiddenInput = document.getElementById('signatureDataUrl');
+        const form = document.querySelector('form');
+        const clearButton = document.getElementById('clear-canvas');
+
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        // Set canvas size based on its CSS-defined size to avoid distortion
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        function getPos(evt, targetCanvas) {
+            const rect = targetCanvas.getBoundingClientRect();
+            const scaleX = targetCanvas.width / rect.width;
+            const scaleY = targetCanvas.height / rect.height;
+
+            if (evt.touches && evt.touches.length > 0) {
+                return {
+                    x: (evt.touches[0].clientX - rect.left) * scaleX,
+                    y: (evt.touches[0].clientY - rect.top) * scaleY
+                };
+            }
+            return {
+                x: (evt.clientX - rect.left) * scaleX,
+                y: (evt.clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDrawing(e) {
+            drawing = true;
+            draw(e);
+        }
+
+        function stopDrawing() {
+            if (drawing) {
+                drawing = false;
+                ctx.beginPath();
+            }
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            e.preventDefault();
+
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'black';
+
+            const pos = getPos(e, canvas);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+        canvas.addEventListener('mousemove', draw);
+
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchmove', draw);
+
+        clearButton.addEventListener('click', function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hiddenInput.value = '';
+        });
+
+        function isCanvasBlank(c) {
+            return !c.getContext('2d')
+                .getImageData(0, 0, c.width, c.height).data
+                .some(channel => channel !== 0);
+        }
+
+        form.addEventListener('submit', function () {
+            if (!isCanvasBlank(canvas)) {
+                hiddenInput.value = canvas.toDataURL('image/png');
+            } else {
+                hiddenInput.value = '';
+            }
+        });
+
+        //edit profile
+        document.addEventListener('DOMContentLoaded', function () {
+            // Script untuk preview gambar
+            const photoInput = document.getElementById('photoFile');
+            const previewImage = document.getElementById('profile-pic-preview');
+
+            photoInput.addEventListener('change', function (event) {
+                if (event.target.files && event.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewImage.setAttribute('src', e.target.result);
+                    }
+                    reader.readAsDataURL(event.target.files[0]);
+                }
+            });
+
+            // Script untuk menampilkan kembali modal jika ada error
+            const urlParams = new URLSearchParams(window.location.search);
+            // Replace this condition with a value set from your backend template engine
+            if (typeof passwordError !== 'undefined' && passwordError != null) {
+                const passwordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+                passwordModal.show();
+            }
+            // Script untuk alert
+            const alertElements = document.querySelectorAll('.alert');
+            alertElements.forEach(function (alert) {
+                setTimeout(function () {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+        });
+
+        // UX: Clear the other input when switching tabs
+        document.getElementById('upload-tab').addEventListener('shown.bs.tab', function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hiddenInput.value = '';
+        });
+
+        document.getElementById('draw-tab').addEventListener('shown.bs.tab', function () {
+            document.getElementById('signatureImage').value = null;
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         const alertElements = document.querySelectorAll('.alert');
         alertElements.forEach(function (alert) {

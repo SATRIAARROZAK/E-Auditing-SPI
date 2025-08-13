@@ -47,7 +47,7 @@
                                         <input class="form-control" th:value="${user.role}" disabled />
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Username</label>
+                                        <label class="form-label">Nama Pengguna</label>
                                         <input class="form-control" th:value="${user.username}" disabled />
                                     </div>
                                     <div class="col-md-6">
@@ -58,9 +58,14 @@
                                         <label class="form-label">No Telp</label>
                                         <input class="form-control" th:value="${user.phoneNumber}" disabled />
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-9">
                                         <label class="form-label">Alamat</label>
-                                        <textarea class="form-control" th:text="${user.address ?: 'Alamat belum diisi.'}" disabled></textarea>
+                                        <textarea class="form-control"
+                                            th:text="${user.address ?: 'Alamat belum diisi.'}" disabled></textarea>
+                                    </div>
+                                    <div class="mt-4">
+                                        <a class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#changePasswordModal"><b>Ganti Kata Sandi</b></a>
                                     </div>
                                 </div>
 
@@ -69,9 +74,6 @@
                                 </div>
                             </div>
                         </form>
-
-
-
                     </div>
                 </div>
             </div>

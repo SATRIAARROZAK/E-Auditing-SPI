@@ -33,7 +33,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/login", "/register", "/css/**", "/error",
                                                                 "/profile/edit", "/profile/update", "/css/**", "/js/**",
                                                                 "/img/**", "/vendor/**",
-                                                                "/fonts/**", "/profile-photos/**", "/pdf/**") // <--
+                                                                "/fonts/**", "/profile-photos/**", "/pdf/**", "/uploads/**" ) // <--
                                                                                                               // TAMBAHKAN
                                                                                                               // INI
                                                 .permitAll()

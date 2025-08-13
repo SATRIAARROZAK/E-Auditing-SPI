@@ -22,6 +22,12 @@ public class ProfileDto {
     @NotEmpty(message = "Nomor telepon tidak boleh kosong")
     private String phoneNumber;
 
+    @NotEmpty(message = "Email tidak boleh kosong")
+    private String email;
+
+    @NotEmpty(message = "Username tidak boleh kosong")
+    private String username;
+
     @NotEmpty(message = "Alamat tidak boleh kosong")
     private String address;
 }

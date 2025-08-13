@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsernameOrEmail(username, username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + username));
-        
+
         return new CustomUserDetails(user);
     }
 
@@ -79,11 +79,16 @@ public class UserDetailsServiceImpl implements UserService, UserDetailsService {
             return userRepository.findAll(pageable);
         }
         // Assuming you add a search method to UserRepository, e.g.:
-        // @Query("SELECT u FROM User u WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+        // @Query("SELECT u FROM User u WHERE LOWER(u.username) LIKE LOWER(CONCAT('%',
+        // :keyword, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+        // LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
         // Page<User> searchUsers(@Param("keyword") String keyword, Pageable pageable);
-        // For simplicity, for now, if no specific search method for users, you might fetch all and filter in memory (not ideal for large datasets)
+        // For simplicity, for now, if no specific search method for users, you might
+        // fetch all and filter in memory (not ideal for large datasets)
         // or add the @Query as shown above to your UserRepository.
-        return userRepository.findByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFullNameContainingIgnoreCase(keyword, keyword, keyword, pageable);
+        return userRepository
+                .findByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFullNameContainingIgnoreCase(keyword,
+                        keyword, keyword, pageable);
     }
 
     @Override
@@ -142,5 +147,20 @@ public class UserDetailsServiceImpl implements UserService, UserDetailsService {
         user.setProfileComplete(true);
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public void changePassword(String username, String oldPassword, String newPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User tidak ditemukan."));
+
+        // Cek apakah password lama yang dimasukkan benar
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Password lama yang Anda masukkan salah.");
+        }
+
+        // Enkripsi dan simpan password baru
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }

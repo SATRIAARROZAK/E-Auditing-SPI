@@ -29,4 +29,7 @@ public interface UserService {
     void deleteUser(Long id);
 
     User updateProfile(String username, ProfileDto profileDto);
+
+    void changePassword(String username, String oldPassword, String newPassword);
+
 }

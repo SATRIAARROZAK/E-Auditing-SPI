@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head th:replace="~{fragments/_header :: header('Edit Profile')}"></head>
+
+<body>
+    <div layout:fragment="page-title">
+        <h3 class="mb-0">Ubah Profile</h3>
+    </div>
+
+    <div layout:fragment="breadcrumb">
+        <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a th:href="@{/dashboard}">Beranda</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Ubah Profile</li>
+        </ol>
+    </div>
+
+    <div layout:fragment="content">
+        <div th:if="${passwordError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${passwordError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="card card-primary card-outline">
+            <form th:action="@{/profile/update}" th:object="${profileDto}" method="post" enctype="multipart/form-data">
+
+                <div class="card-body box-profile">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <img id="profile-pic-preview" class="user-image rounded-circle shadow"
+                                th:if="${#authentication.principal.user.photoPath}"
+                                th:src="@{'/profile-photos/' + ${#authentication.principal.user.photoPath}}"
+                                alt="User profile picture" style="width: 180px; height: 220px; object-fit: cover;">
+                            <div class="mt-3">
+                                <label for="photoFile" class="btn btn-sm btn-info">
+                                    <i class="bi bi-upload"></i> Ganti Foto
+                                </label>
+                                <input type="file" name="photoFile" id="photoFile" class="d-none"
+                                    accept="image/png, image/jpeg">
+                                <p class="text-muted small mt-1">Max. 2MB (JPG/PNG)</p>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <!--begin::Body-->
+                            <div class="card-body">
+                                <!--begin::Row-->
+                                <div class="row g-3">
+                                    <!--begin::Col-->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama Lengkap</label>
+                                        <input type="text" class="form-control" th:field="*{fullName}" id="fullName"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Jabatan</label>
+                                        <input type="text" class="form-control" th:field="*{position}" id="position"
+                                            required>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama Pengguna</label>
+                                        <input type="username" class="form-control" th:field="*{username}" id="username"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" th:field="*{email}" id="email"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">No Telp</label>
+                                        <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Alamat</label>
+                                        <textarea class="form-control" id="address" rows="3"
+                                            th:field="*{address}"></textarea>
+                                    </div>
+                                    <div class="mt-4">
+                                        <a class="btn btn-outline-danger" data-bs-toggle="modal"
+                                            data-bs-target="#changePasswordModal"><b>Ganti Kata Sandi</b></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <a th:href="@{/profile/view}" class="btn btn-warning">Batal</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/profile/change-password}" th:object="${passwordChangeDto}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePasswordModalLabel">Formulir Ubah Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label for="oldPassword">Password Lama</label>
+                            <input type="password" class="form-control" name="oldPassword" id="oldPassword" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="newPassword">Password Baru</label>
+                            <input type="password" class="form-control" name="newPassword" id="newPassword" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="confirmPassword">Konfirmasi Password Baru</label>
+                            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword"
+                                required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Ubah Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
