@@ -53,8 +53,8 @@ public class User {
     @Column(name = "profile_complete", nullable = false)
     private boolean profileComplete = false;
 
-    public Object getPhoto() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPhoto'");
-    }
+    // public Object getPhoto() {
+    //     // TODO Auto-generated method stub
+    //     throw new UnsupportedOperationException("Unimplemented method 'getPhoto'");
+    // }
 }

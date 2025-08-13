@@ -36,8 +36,8 @@
                                 <label for="photoFile" class="btn btn-sm btn-info">
                                     <i class="bi bi-upload"></i> Ganti Foto
                                 </label>
-                                <input type="file" name="photoFile" id="photoFile" class="d-none"
-                                    accept="image/png, image/jpeg">
+                                <input type="file" name="photoFile" id="photoFile" class="d-none" accept="image/*"
+                                    onchange="previewImage(event)">
                                 <p class="text-muted small mt-1">Max. 2MB (JPG/PNG)</p>
                             </div>
                         </div>
@@ -57,10 +57,10 @@
                                         <input type="text" class="form-control" th:field="*{position}" id="position"
                                             required>
                                     </div>
-                                    
+
                                     <div class="col-md-6">
                                         <label class="form-label">Nama Pengguna</label>
-                                        <input type="username" class="form-control" th:field="*{username}" id="username"
+                                        <input type="text" class="form-control" th:field="*{username}" id="username"
                                             required>
                                     </div>
                                     <div class="col-md-6">
@@ -70,18 +70,22 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">No Telp</label>
-                                        <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber"
-                                            required>
+                                        <input type="text" class="form-control" th:field="*{phoneNumber}"
+                                            id="phoneNumber" required>
                                     </div>
                                     <div class="col-md-6">
+                                        <label class="form-label">Peran</label>
+                                        <input class="form-control" th:value="${user.role}" disabled />
+                                    </div>
+                                    <div class="col-md-9">
                                         <label class="form-label">Alamat</label>
                                         <textarea class="form-control" id="address" rows="3"
                                             th:field="*{address}"></textarea>
                                     </div>
-                                    <div class="mt-4">
-                                        <a class="btn btn-outline-danger" data-bs-toggle="modal"
-                                            data-bs-target="#changePasswordModal"><b>Ganti Kata Sandi</b></a>
-                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <a class="btn btn-outline-danger" data-bs-toggle="modal"
+                                        data-bs-target="#changePasswordModal"><b>Ubah Katasandi</b></a>
                                 </div>
                             </div>
                         </div>
@@ -93,39 +97,43 @@
                 </div>
             </form>
         </div>
-    </div>
-    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form th:action="@{/profile/change-password}" th:object="${passwordChangeDto}" method="post">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="changePasswordModalLabel">Formulir Ubah Password</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group mb-3">
-                            <label for="oldPassword">Password Lama</label>
-                            <input type="password" class="form-control" name="oldPassword" id="oldPassword" required>
+        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form th:action="@{/profile/change-password}" th:object="${passwordChangeDto}" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="changePasswordModalLabel">Formulir Ubah Password</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="newPassword">Password Baru</label>
-                            <input type="password" class="form-control" name="newPassword" id="newPassword" required>
+                        <div class="modal-body">
+                            <div class="form-group mb-3">
+                                <label for="oldPassword">Password Lama</label>
+                                <input type="password" class="form-control" name="oldPassword" id="oldPassword"
+                                    required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="newPassword">Password Baru</label>
+                                <input type="password" class="form-control" name="newPassword" id="newPassword"
+                                    required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="confirmPassword">Konfirmasi Password Baru</label>
+                                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword"
+                                    required>
+                            </div>
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="confirmPassword">Konfirmasi Password Baru</label>
-                            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword"
-                                required>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Ubah Password</button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Ubah Password</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
+
 </body>
 
 </html>

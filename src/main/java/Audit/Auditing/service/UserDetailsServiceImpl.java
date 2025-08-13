@@ -144,6 +144,8 @@ public class UserDetailsServiceImpl implements UserService, UserDetailsService {
         user.setPosition(profileDto.getPosition());
         user.setPhoneNumber(profileDto.getPhoneNumber());
         user.setAddress(profileDto.getAddress());
+        user.setEmail(profileDto.getEmail());
+        user.setUsername(profileDto.getUsername());
         user.setProfileComplete(true);
 
         return userRepository.save(user);

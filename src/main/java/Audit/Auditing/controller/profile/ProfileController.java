@@ -15,11 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 
 import java.io.IOException;
 
@@ -111,10 +106,13 @@ public class ProfileController {
         profileDto.setPosition(user.getPosition());
         profileDto.setPhoneNumber(user.getPhoneNumber());
         profileDto.setAddress(user.getAddress());
+        profileDto.setEmail(user.getEmail());
+        profileDto.setUsername(user.getUsername());
 
+       model.addAttribute("user", user); 
+        
         model.addAttribute("profileDto", profileDto);
-        // model.addAttribute("currentPhoto", user.getPhoto());
-        // Inisialisasi DTO untuk modal ganti password
+        model.addAttribute("currentPhoto", user.getPhotoPath());
         model.addAttribute("passwordChangeDto", new PasswordChangeDto());
         return "pages/account/edit-profile"; // Mengarah ke edit-profile.html
     }
@@ -134,12 +132,12 @@ public class ProfileController {
             String username = authentication.getName();
             User user = userService.findByUsername(username)
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));
-            model.addAttribute("currentPhoto", user.getPhoto());
-            return "edit-profile";
+            model.addAttribute("currentPhoto", user.getPhotoPath());
+            return "pages/account/edit-profile";
         }
 
         String username = authentication.getName();
-        userService.updateProfile(username, profileDto, photoFile);
+        userService.updateProfile(username, profileDto);
         redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil diperbarui!");
         return "redirect:/profile/view";
     }
