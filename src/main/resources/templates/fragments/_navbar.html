@@ -116,8 +116,7 @@
                 <!--begin::User Menu Dropdown-->
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        <img th:if="${#authentication.principal.user.photoPath}"
-                            th:src="@{'/profile-photos/' + ${#authentication.principal.user.photoPath}}"
+                        <img  th:src="@{${#authentication.principal.user.photoPath != null ? '/profile-photos/' + #authentication.principal.user.photoPath : '/assets/img/default-avatar.png'}}"
                             class="user-image rounded-circle shadow" alt="Foto Profile" />
 
                         <span th:text="${#authentication.principal.user.fullName ?: #authentication.name}"
@@ -126,8 +125,7 @@
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                         <!--begin::User Image-->
                         <li class="user-header text-bg-primary">
-                            <img th:if="${#authentication.principal.user.photoPath}"
-                                th:src="@{'/profile-photos/' + ${#authentication.principal.user.photoPath}}"
+                            <img  th:src="@{${#authentication.principal.user.photoPath != null ? '/profile-photos/' + #authentication.principal.user.photoPath : '/assets/img/default-avatar.png'}}"
                                 class="rounded-circle shadow" alt="Image" />
                             <p>
                                 <span th:text="${#authentication.principal.user.fullName}">Nama Lengkap Pengguna</span>
@@ -138,13 +136,13 @@
                         <!--end::User Image-->
                         <!--begin::Menu Body-->
                         <!-- <li class="user-body"> -->
-                            <!--begin::Row-->
-                            <!-- <div class="row">
+                        <!--begin::Row-->
+                        <!-- <div class="row">
                                 <div class="col-4 text-center"><a href="#">Followers</a></div>
                                 <div class="col-4 text-center"><a href="#">Sales</a></div>
                                 <div class="col-4 text-center"><a href="#">Friends</a></div>
                             </div> -->
-                            <!--end::Row-->
+                        <!--end::Row-->
                         <!-- </li> -->
                         <!--end::Menu Body-->
                         <!--begin::Menu Footer-->

@@ -10,12 +10,15 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.Optional;
@@ -123,10 +126,14 @@ public class UserDetailsServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public User updateProfile(String username, ProfileDto profileDto) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
+    public User updateProfile(String currentUsername, ProfileDto profileDto) {
+        User user = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + currentUsername));
 
+        // Simpan username lama untuk perbandingan
+        String oldUsername = user.getUsername();
+
+        // Proses update foto dan tanda tangan (jika ada)
         if (profileDto.getPhoto() != null && !profileDto.getPhoto().isEmpty()) {
             String fileName = fileStorageService.storeFile(profileDto.getPhoto());
             user.setPhotoPath(fileName);
@@ -140,15 +147,45 @@ public class UserDetailsServiceImpl implements UserService, UserDetailsService {
             user.setSignaturePath(fileName);
         }
 
+        // Update informasi profil lainnya
         user.setFullName(profileDto.getFullName());
         user.setPosition(profileDto.getPosition());
         user.setPhoneNumber(profileDto.getPhoneNumber());
         user.setAddress(profileDto.getAddress());
         user.setEmail(profileDto.getEmail());
-        user.setUsername(profileDto.getUsername());
         user.setProfileComplete(true);
 
-        return userRepository.save(user);
+        // Ambil username baru dari DTO dan cek apakah berubah
+        String newUsername = profileDto.getUsername();
+        boolean isUsernameChanged = !oldUsername.equals(newUsername);
+
+        if (isUsernameChanged) {
+            user.setUsername(newUsername);
+        }
+
+        User updatedUser = userRepository.save(user);
+
+        // // Jika username berubah, perbarui konteks keamanan (sesi)
+        // if (isUsernameChanged) {
+        // UserDetails newUserDetails = new CustomUserDetails(updatedUser);
+        // Authentication newAuth = new
+        // UsernamePasswordAuthenticationToken(newUserDetails, null,
+        // newUserDetails.getAuthorities());
+        // SecurityContextHolder.getContext().setAuthentication(newAuth);
+        // }
+
+        UserDetails newUserDetails = new CustomUserDetails(updatedUser);
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                newUserDetails,
+                null, // Credentials tidak perlu diisi ulang
+                newUserDetails.getAuthorities() // Ambil roles/authorities yang sudah ada
+        );
+
+        // Set otentikasi baru ke dalam konteks keamanan
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+        // =============================================================
+
+        return updatedUser;
     }
 
     @Override

@@ -29,15 +29,13 @@
                     <div class="row">
                         <div class="col-md-3 text-center">
                             <img id="profile-pic-preview" class="user-image rounded-circle shadow"
-                                th:if="${#authentication.principal.user.photoPath}"
-                                th:src="@{'/profile-photos/' + ${#authentication.principal.user.photoPath}}"
+                                th:src="${user.photoPath != null ? '/profile-photos/' + user.photoPath : '/assets/img/default-avatar.png'}"
                                 alt="User profile picture" style="width: 180px; height: 220px; object-fit: cover;">
                             <div class="mt-3">
                                 <label for="photoFile" class="btn btn-sm btn-info">
                                     <i class="bi bi-upload"></i> Ganti Foto
                                 </label>
-                                <input type="file" name="photoFile" id="photoFile" class="d-none" accept="image/*"
-                                    onchange="previewImage(event)">
+                                <input type="file" name="photoFile" id="photoFile" class="d-none" accept="image/*">
                                 <p class="text-muted small mt-1">Max. 2MB (JPG/PNG)</p>
                             </div>
                         </div>

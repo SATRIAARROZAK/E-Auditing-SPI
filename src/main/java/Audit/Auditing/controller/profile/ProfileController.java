@@ -136,6 +136,12 @@ public class ProfileController {
             return "pages/account/edit-profile";
         }
 
+         // --- INI BAGIAN YANG DIPERBAIKI ---
+        // Set file foto yang di-upload ke dalam DTO sebelum dikirim ke service
+        profileDto.setPhoto(photoFile); 
+        // ---------------------------------
+
+        // Panggil service untuk memperbarui profil
         String username = authentication.getName();
         userService.updateProfile(username, profileDto);
         redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil diperbarui!");
