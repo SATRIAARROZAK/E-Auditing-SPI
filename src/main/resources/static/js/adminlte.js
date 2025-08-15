@@ -155,6 +155,25 @@
         });
     });
 
+    document.addEventListener('DOMContentLoaded', function () {
+        // Script Pratinjau Gambar
+        const imageInput = document.getElementById('validFoto');
+        const validateImage = document.getElementById('validate-user-image');
+
+
+        imageInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    validateImage.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+    
+
     //EDIT PROFILE IMAGE AND PASSWORD MODAL
     document.addEventListener('DOMContentLoaded', function () {
         // Mengambil elemen berdasarkan ID yang sudah disesuaikan
@@ -164,6 +183,7 @@
         const dropdownImage = document.getElementById('dropdown-user-image');
 
         // Menambahkan event listener pada input file
+
         photoInput.addEventListener("change", function () {
             const file = this.files[0];
             if (file) {
@@ -180,7 +200,10 @@
 
                 reader.readAsDataURL(file);
             }
+
         });
+
+
         // Script untuk menampilkan kembali modal jika ada error
         const urlParams = new URLSearchParams(window.location.search);
         // Replace this condition with a value set from your backend template engine
@@ -195,6 +218,34 @@
                 const bsAlert = new bootstrap.Alert(alert);
                 bsAlert.close();
             }, 5000);
+        });
+
+        // --- Logika Tanda Tangan (tetap sama) ---
+        const canvas = document.getElementById('signature-canvas');
+        const signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)'
+        });
+        const signatureModal = document.getElementById('signatureModal');
+        signatureModal.addEventListener('shown.bs.modal', function () {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear();
+        });
+        document.getElementById('clear-signature').addEventListener('click', function () {
+            signaturePad.clear();
+        });
+        document.getElementById('save-signature').addEventListener('click', function () {
+            if (signaturePad.isEmpty()) {
+                alert("Mohon bubuhkan tanda tangan terlebih dahulu.");
+            } else {
+                const dataURL = signaturePad.toDataURL('image/png');
+                document.getElementById('signatureDataUrl').value = dataURL;
+                document.getElementById('signature-preview').src = dataURL;
+                const modal = bootstrap.Modal.getInstance(signatureModal);
+                modal.hide();
+            }
         });
     });
 

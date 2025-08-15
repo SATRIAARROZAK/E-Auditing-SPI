@@ -4,7 +4,100 @@
 <head th:replace="~{fragments/_header :: header('Lihat Profile')}"></head>
 
 <body>
-  
+    <div class="row justify-content-center">
+        <div class="col-md-8 mt-5">
+            <div class="card card-outline card-primary">
+                <div class="card-header text-center">
+                    <a th:href="@{/}" class="h1"><b>E-Auditing</b> SPI</a>
+                </div>
+                <div class="card-body">
+                    <p class="login-box-msg">
+                        <b>Selamat datang!</b><br>
+                        Silakan lengkapi data profil Anda untuk melanjutkan.
+                    </p>
+                    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                    <form th:action="@{/profile/update}" th:object="${profileDto}" method="post"
+                        enctype="multipart/form-data">
+                        <!-- <input type="hidden" th:field="*{signatureDataUrl}" id="signatureDataUrl" /> -->
+                        <div class="text-center mb-4">
+                            <img th:field="*{photo}" id="validate-user-image" class="img-fluid rounded-circle shadow-sm mb-3"
+                                th:src="@{${#authentication.principal.user.photoPath != null ? '/profile-photos/' + #authentication.principal.user.photoPath : '/assets/img/default-avatar.png'}}"
+                                alt="User profile picture" style="width: 180px; height: 220px; object-fit: cover;">
+                            <div>
+                                <label for="validFoto" class="btn btn-sm btn-info">
+                                    <i class="bi bi-upload"></i> Unggah Foto
+                                </label>
+                                <input type="file" id="validFoto"  name="validFoto" class="d-none"
+                                    accept="image/*">
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Nama Lengkap" th:field="*{fullName}"
+                                required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Jabatan" th:field="*{position}"
+                                required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="tel" class="form-control" placeholder="Nomor Telepon" th:field="*{phoneNumber}"
+                                required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <textarea class="form-control" rows="3" placeholder="Alamat Rumah" th:field="*{address}"
+                                required></textarea>
+                        </div>
+                        <!-- <div class="text-center mb-4">
+                            <label class="form-label d-block">Tanda Tangan</label>
+                            <img id="signature-preview" class="img-fluid border rounded shadow-sm mb-3"
+                                src="https://via.placeholder.com/200x100.png?text=Tanda+Tangan"
+                                alt="Pratinjau Tanda Tangan" style="width: 200px; height: 100px; object-fit: contain;">
+                            <div>
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                    data-bs-target="#signatureModal">
+                                    <i class="bi bi-pencil-square"></i> Buat atau Ubah Tanda Tangan
+                                </button>
+                            </div>
+                        </div> -->
+                        <hr>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">Simpan dan Lanjutkan</button>
+                        </div>
+                    </form>
+                </div>
+
+
+
+                <div class="modal fade" id="signatureModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Bubuhkan Tanda Tangan Anda</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <canvas id="signature-canvas" width="450" height="200"></canvas>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="clear-signature">Ulangi</button>
+                                <button type="button" class="btn btn-primary" id="save-signature">Simpan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div th:replace="~{fragments/_footer :: footer}"></div>
+
+    </div>
+
+
+    <div th:replace="~{fragments/_scripts :: scripts}"></div>
 </body>
 
 </html>

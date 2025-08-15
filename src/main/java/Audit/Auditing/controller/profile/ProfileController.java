@@ -67,28 +67,27 @@ public class ProfileController {
     /**
      * Menampilkan halaman untuk MENGISI profil pertama kali.
      */
-    @GetMapping("/validate")
-    public String showValidateProfileForm(Model model, Authentication authentication) {
-        String username = authentication.getName();
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        // Menggunakan objek User langsung karena form ini mengisi data User
-        model.addAttribute("user", user);
-        return "pages/account/validate-profile"; // Mengarah ke validate-profile.html
+   @GetMapping("/validate")
+    public String showValidateProfileForm(Model model) {
+        // Kirim DTO kosong untuk diisi oleh form
+        model.addAttribute("profileDto", new ProfileDto());
+        return "pages/account/validate-profile"; // Halaman baru yang terpisah
     }
 
-    /**
-     * Memproses data dari form validasi profil.
-     */
     @PostMapping("/validate")
-    public String processValidateProfile(@ModelAttribute("user") ProfileDto profileDto,
-            Authentication authentication,
-            RedirectAttributes redirectAttributes) {
+    public String processValidateProfile(@Valid @ModelAttribute("profileDto") ProfileDto profileDto,
+                                         BindingResult result,
+                                         Authentication authentication,
+                                         RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            // Jika ada error, kembali ke form validasi
+            return "pages/account/validate-profile";
+        }
         String username = authentication.getName();
-        userService.completeProfile(username, profileDto);
+        // Gunakan method updateProfile yang sudah kita modifikasi
+        userService.updateProfile(username, profileDto); 
         redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil dilengkapi!");
-        // Setelah selesai, arahkan ke halaman lihat profil
-        return "redirect:/dashboard"; // Atau bisa juga ke /profile/view
+        return "redirect:/profile/view"; // Arahkan ke halaman lihat profil setelah selesai
     }
 
     /**
