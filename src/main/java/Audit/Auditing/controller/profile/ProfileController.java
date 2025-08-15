@@ -74,7 +74,7 @@ public class ProfileController {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         // Menggunakan objek User langsung karena form ini mengisi data User
         model.addAttribute("user", user);
-        return "validate-profile"; // Mengarah ke validate-profile.html
+        return "pages/account/validate-profile"; // Mengarah ke validate-profile.html
     }
 
     /**
@@ -88,7 +88,7 @@ public class ProfileController {
         userService.completeProfile(username, profileDto);
         redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil dilengkapi!");
         // Setelah selesai, arahkan ke halaman lihat profil
-        return "redirect:/profile/view";
+        return "redirect:/dashboard"; // Atau bisa juga ke /profile/view
     }
 
     /**

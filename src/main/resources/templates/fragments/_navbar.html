@@ -116,7 +116,7 @@
                 <!--begin::User Menu Dropdown-->
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        <img  th:src="@{${#authentication.principal.user.photoPath != null ? '/profile-photos/' + #authentication.principal.user.photoPath : '/assets/img/default-avatar.png'}}"
+                        <img  id="navbar-user-image" th:src="@{${#authentication.principal.user.photoPath != null ? '/profile-photos/' + #authentication.principal.user.photoPath : '/assets/img/default-avatar.png'}}"
                             class="user-image rounded-circle shadow" alt="Foto Profile" />
 
                         <span th:text="${#authentication.principal.user.fullName ?: #authentication.name}"
@@ -125,7 +125,7 @@
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                         <!--begin::User Image-->
                         <li class="user-header text-bg-primary">
-                            <img  th:src="@{${#authentication.principal.user.photoPath != null ? '/profile-photos/' + #authentication.principal.user.photoPath : '/assets/img/default-avatar.png'}}"
+                            <img id="dropdown-user-image" th:src="@{${#authentication.principal.user.photoPath != null ? '/profile-photos/' + #authentication.principal.user.photoPath : '/assets/img/default-avatar.png'}}"
                                 class="rounded-circle shadow" alt="Image" />
                             <p>
                                 <span th:text="${#authentication.principal.user.fullName}">Nama Lengkap Pengguna</span>

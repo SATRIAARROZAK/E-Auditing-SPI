@@ -116,38 +116,23 @@
             }
         });
 
-        //edit profile
-        document.addEventListener('DOMContentLoaded', function () {
-            // Script untuk preview gambar
-            const photoInput = document.getElementById('photoFile');
-            const previewImage = document.getElementById('profile-pic-preview');
+        const imgInput = document.getElementById('image')
+        const previewZone = document.getElementById('preview')
 
-            photoInput.addEventListener('change', function (event) {
-                if (event.target.files && event.target.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        previewImage.setAttribute('src', e.target.result);
-                    }
-                    reader.readAsDataURL(event.target.files[0]);
-                }
-            });
+        imgInput.addEventListener("change", () => {
+            const file = imgInput.files[0]
+            const reader = new FileReader;
 
-            // Script untuk menampilkan kembali modal jika ada error
-            const urlParams = new URLSearchParams(window.location.search);
-            // Replace this condition with a value set from your backend template engine
-            if (typeof passwordError !== 'undefined' && passwordError != null) {
-                const passwordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
-                passwordModal.show();
-            }
-            // Script untuk alert
-            const alertElements = document.querySelectorAll('.alert');
-            alertElements.forEach(function (alert) {
-                setTimeout(function () {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                }, 5000);
-            });
-        });
+            reader.addEventListener("load", () => {
+                previewZone.innerHTML = ""
+                const img = document.createElement("img")
+                img.src = reader.result
+
+                previewZone.appendChild(img)
+            })
+
+            reader.readAsDataURL(file)
+        })
 
         // UX: Clear the other input when switching tabs
         document.getElementById('upload-tab').addEventListener('shown.bs.tab', function () {
@@ -161,6 +146,49 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
+        const alertElements = document.querySelectorAll('.alert');
+        alertElements.forEach(function (alert) {
+            setTimeout(function () {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    });
+
+    //EDIT PROFILE IMAGE AND PASSWORD MODAL
+    document.addEventListener('DOMContentLoaded', function () {
+        // Mengambil elemen berdasarkan ID yang sudah disesuaikan
+        const photoInput = document.getElementById('photoFile');
+        const previewImage = document.getElementById('profile-pic-preview');
+        const navbarImage = document.getElementById('navbar-user-image');
+        const dropdownImage = document.getElementById('dropdown-user-image');
+
+        // Menambahkan event listener pada input file
+        photoInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const result = e.target.result;
+
+                    // Mengganti sumber SEMUA gambar yang relevan
+                    if (previewImage) previewImage.src = result;
+                    if (navbarImage) navbarImage.src = result;
+                    if (dropdownImage) dropdownImage.src = result;
+                }
+
+                reader.readAsDataURL(file);
+            }
+        });
+        // Script untuk menampilkan kembali modal jika ada error
+        const urlParams = new URLSearchParams(window.location.search);
+        // Replace this condition with a value set from your backend template engine
+        if (typeof passwordError !== 'undefined' && passwordError != null) {
+            const passwordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+            passwordModal.show();
+        }
+        // Script untuk alert
         const alertElements = document.querySelectorAll('.alert');
         alertElements.forEach(function (alert) {
             setTimeout(function () {
