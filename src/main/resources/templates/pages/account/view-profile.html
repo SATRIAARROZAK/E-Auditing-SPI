@@ -27,7 +27,6 @@
                 <div class="row">
                     <div class="col-md-3 text-center">
                         <img class="user-image rounded-circle shadow"
-                            th:if="${#authentication.principal.user.photoPath}"
                             th:src="${user.photoPath != null ? '/profile-photos/' + user.photoPath : '/assets/img/default-avatar.png'}"
                             alt="User profile picture" style="width: 180px; height: 220px; object-fit: cover;">
                         <h3 class="profile-username text-center mt-2" th:text="${user.fullName}">Nama Lengkap</h3>

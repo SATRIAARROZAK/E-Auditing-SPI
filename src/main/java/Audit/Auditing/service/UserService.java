@@ -6,6 +6,7 @@ import Audit.Auditing.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,9 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    User updateProfile(String username, ProfileDto profileDto);
+    User updateProfile(String username, ProfileDto profileDto) throws IOException;
+
+    // User completeProfile(String username, ProfileDto profileDto) throws IOException;
 
     void changePassword(String username, String oldPassword, String newPassword);
 

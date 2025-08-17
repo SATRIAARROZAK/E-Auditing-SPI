@@ -15,25 +15,24 @@
                         <b>Selamat datang!</b><br>
                         Silakan lengkapi data profil Anda untuk melanjutkan.
                     </p>
-                    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-                    <form th:action="@{/profile/update}" th:object="${profileDto}" method="post"
+                 
+                    <form th:action="@{/profile/validate}" th:object="${profileDto}" method="post"
                         enctype="multipart/form-data">
                         <!-- <input type="hidden" th:field="*{signatureDataUrl}" id="signatureDataUrl" /> -->
                         <div class="text-center mb-4">
-                            <img th:field="*{photo}" id="validate-user-image" class="img-fluid rounded-circle shadow-sm mb-3"
+                            <img  id="validate-user-image" class="img-fluid rounded-circle shadow-sm mb-3"
                                 th:src="@{${#authentication.principal.user.photoPath != null ? '/profile-photos/' + #authentication.principal.user.photoPath : '/assets/img/default-avatar.png'}}"
                                 alt="User profile picture" style="width: 180px; height: 220px; object-fit: cover;">
                             <div>
                                 <label for="validFoto" class="btn btn-sm btn-info">
                                     <i class="bi bi-upload"></i> Unggah Foto
                                 </label>
-                                <input type="file" id="validFoto"  name="validFoto" class="d-none"
+                                <input type="file" id="validFoto" name="photoFile" class="d-none"
                                     accept="image/*">
                             </div>
                         </div>
 
-                        <div class="input-group mb-3">
+                        <div class="text-center mb-3 col-md-6">
                             <input type="text" class="form-control" placeholder="Nama Lengkap" th:field="*{fullName}"
                                 required>
                         </div>
