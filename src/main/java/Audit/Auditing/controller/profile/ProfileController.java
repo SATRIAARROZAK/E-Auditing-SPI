@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
 
@@ -64,49 +64,13 @@ public class ProfileController {
         return "pages/account/view-profile"; // Mengarah ke view-profile.html
     }
 
-    /**
-     * Menampilkan halaman untuk MENGISI profil pertama kali.
-     */
-    // @GetMapping("/validate")
-    // public String showValidateProfileForm(Model model) {
-    //     // Kirim DTO kosong untuk diisi oleh form
-    //     model.addAttribute("profileDto", new ProfileDto());
-    //     return "pages/account/validate-profile"; // Halaman baru yang terpisah
-    // }
-
-  
-    //   @PostMapping("/validate")
-    // public String processValidateProfile(@Valid @ModelAttribute("profileDto") ProfileDto profileDto,
-    //                                      BindingResult result,
-    //                                      Authentication authentication,
-    //                                      RedirectAttributes redirectAttributes,
-    //                                      Model model) throws IOException {
-    //     if (result.hasErrors()) {
-    //         model.addAttribute("profileDto", profileDto);
-    //         return "pages/account/validate-profile";
-    //     }
-
-    //     String username = authentication.getName();
-    //     // [DIUBAH] Memanggil method khusus untuk melengkapi profil
-    //     userService.completeProfile(username, profileDto);
-        
-    //     redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil dilengkapi! Selamat datang.");
-        
-    //     // [TUJUAN] Mengarahkan ke Dashboard
-    //     return "redirect:/dashboard";
-    // }
-
-    /**
-     * Alur EDIT: Memanggil service updateProfile()
-     * dan mengarahkan ke /profile/view.
-     */
     @PostMapping("/update")
     public String updateProfile(@Valid @ModelAttribute("profileDto") ProfileDto profileDto,
-                                BindingResult result,
-                                @RequestParam("photoFile") MultipartFile photoFile,
-                                Authentication authentication,
-                                RedirectAttributes redirectAttributes,
-                                Model model) throws IOException {
+            BindingResult result,
+            @RequestParam("photoFile") MultipartFile photoFile,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes,
+            Model model) throws IOException {
         String username = authentication.getName();
         if (result.hasErrors()) {
             User user = userService.findByUsername(username)
@@ -115,19 +79,17 @@ public class ProfileController {
             return "pages/account/edit-profile";
         }
 
-                profileDto.setPhoto(photoFile);
+        profileDto.setPhoto(photoFile);
 
-        
         // [TETAP] Memanggil method untuk memperbarui profil
         userService.updateProfile(username, profileDto);
-        
+
         redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil diperbarui!");
-        
+
         // [TUJUAN] Mengarahkan kembali ke halaman lihat profil
         return "redirect:/profile/view";
     }
 
-   
     /**
      * Menampilkan halaman untuk MENGEDIT profil yang sudah ada.
      */
@@ -151,10 +113,10 @@ public class ProfileController {
         model.addAttribute("profileDto", profileDto);
         model.addAttribute("currentPhoto", user.getPhotoPath());
         model.addAttribute("passwordChangeDto", new PasswordChangeDto());
+        model.addAttribute("isProfileComplete", user.isProfileComplete());
+
         return "pages/account/edit-profile"; // Mengarah ke edit-profile.html
     }
-
-   
 
     /**
      * Memproses permintaan ganti password dari modal.
@@ -188,76 +150,114 @@ public class ProfileController {
     }
 }
 
+/**
+ * Menampilkan halaman untuk MENGISI profil pertama kali.
+ */
+// @GetMapping("/validate")
+// public String showValidateProfileForm(Model model) {
+// // Kirim DTO kosong untuk diisi oleh form
+// model.addAttribute("profileDto", new ProfileDto());
+// return "pages/account/validate-profile"; // Halaman baru yang terpisah
+// }
 
+// @PostMapping("/validate")
+// public String processValidateProfile(@Valid @ModelAttribute("profileDto")
+// ProfileDto profileDto,
+// BindingResult result,
+// Authentication authentication,
+// RedirectAttributes redirectAttributes,
+// Model model) throws IOException {
+// if (result.hasErrors()) {
+// model.addAttribute("profileDto", profileDto);
+// return "pages/account/validate-profile";
+// }
 
- /**
-     * Memproses data dari form edit profil.
-     */
-    // @PostMapping("/update")
-    // public String updateProfile(@Valid @ModelAttribute("profileDto") ProfileDto profileDto,
-    //         BindingResult result,
-    //         @RequestParam("photoFile") MultipartFile photoFile,
-    //         Authentication authentication,
-    //         RedirectAttributes redirectAttributes,
-    //         Model model) throws IOException {
+// String username = authentication.getName();
+// // [DIUBAH] Memanggil method khusus untuk melengkapi profil
+// userService.completeProfile(username, profileDto);
 
-    //     if (result.hasErrors()) {
-    //         String username = authentication.getName();
-    //         User user = userService.findByUsername(username)
-    //                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-    //         model.addAttribute("currentPhoto", user.getPhotoPath());
-    //         return "pages/account/edit-profile";
-    //     }
+// redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil
+// dilengkapi! Selamat datang.");
 
-    //     // --- INI BAGIAN YANG DIPERBAIKI ---
-    //     // Set file foto yang di-upload ke dalam DTO sebelum dikirim ke service
-    //     profileDto.setPhoto(photoFile);
-    //     // ---------------------------------
+// // [TUJUAN] Mengarahkan ke Dashboard
+// return "redirect:/dashboard";
+// }
 
-    //     // Panggil service untuk memperbarui profil
-    //     String username = authentication.getName();
-    //     userService.updateProfile(username, profileDto);
-    //     redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil diperbarui!");
-    //     return "redirect:/profile/view";
-    // }
+/**
+ * Alur EDIT: Memanggil service updateProfile()
+ * dan mengarahkan ke /profile/view.
+ */
 
+/**
+ * Memproses data dari form edit profil.
+ */
+// @PostMapping("/update")
+// public String updateProfile(@Valid @ModelAttribute("profileDto") ProfileDto
+// profileDto,
+// BindingResult result,
+// @RequestParam("photoFile") MultipartFile photoFile,
+// Authentication authentication,
+// RedirectAttributes redirectAttributes,
+// Model model) throws IOException {
 
-        // @PostMapping("/validate")
-    // public String processValidateProfile(@Valid @ModelAttribute("profileDto") ProfileDto profileDto,
-    //         BindingResult result,
-    //         Authentication authentication,
-    //         RedirectAttributes redirectAttributes,
-    //         Model model) throws IOException { // Tambahkan Model
-    //     if (result.hasErrors()) {
-    //         // [DIPERBAIKI] Kirim kembali DTO yang sama agar input pengguna tidak hilang
-    //         model.addAttribute("profileDto", profileDto);
-    //         return "pages/account/validate-profile";
-    //     }
+// if (result.hasErrors()) {
+// String username = authentication.getName();
+// User user = userService.findByUsername(username)
+// .orElseThrow(() -> new IllegalArgumentException("User not found"));
+// model.addAttribute("currentPhoto", user.getPhotoPath());
+// return "pages/account/edit-profile";
+// }
 
-    //     String username = authentication.getName();
-    //     userService.completeProfile(username, profileDto);
+// // --- INI BAGIAN YANG DIPERBAIKI ---
+// // Set file foto yang di-upload ke dalam DTO sebelum dikirim ke service
+// profileDto.setPhoto(photoFile);
+// // ---------------------------------
 
-    //     redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil dilengkapi! Selamat datang.");
+// // Panggil service untuk memperbarui profil
+// String username = authentication.getName();
+// userService.updateProfile(username, profileDto);
+// redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil
+// diperbarui!");
+// return "redirect:/profile/view";
+// }
 
-    //     return "redirect:/dashboard";
-    // }
+// @PostMapping("/validate")
+// public String processValidateProfile(@Valid @ModelAttribute("profileDto")
+// ProfileDto profileDto,
+// BindingResult result,
+// Authentication authentication,
+// RedirectAttributes redirectAttributes,
+// Model model) throws IOException { // Tambahkan Model
+// if (result.hasErrors()) {
+// // [DIPERBAIKI] Kirim kembali DTO yang sama agar input pengguna tidak hilang
+// model.addAttribute("profileDto", profileDto);
+// return "pages/account/validate-profile";
+// }
 
+// String username = authentication.getName();
+// userService.completeProfile(username, profileDto);
 
-      // @PostMapping("/validate")
-    // public String processValidateProfile(@Valid @ModelAttribute("profileDto")
-    // ProfileDto profileDto,
-    // BindingResult result,
-    // Authentication authentication,
-    // RedirectAttributes redirectAttributes) {
-    // if (result.hasErrors()) {
-    // // Jika ada error, kembali ke form validasi
-    // return "pages/account/validate-profile";
-    // }
-    // String username = authentication.getName();
-    // // Gunakan method updateProfile yang sudah kita modifikasi
-    // userService.updateProfile(username, profileDto);
-    // redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil
-    // dilengkapi!");
-    // return "redirect:/dashboard"; // Arahkan ke halaman lihat profil setelah
-    // selesai
-    // }
+// redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil
+// dilengkapi! Selamat datang.");
+
+// return "redirect:/dashboard";
+// }
+
+// @PostMapping("/validate")
+// public String processValidateProfile(@Valid @ModelAttribute("profileDto")
+// ProfileDto profileDto,
+// BindingResult result,
+// Authentication authentication,
+// RedirectAttributes redirectAttributes) {
+// if (result.hasErrors()) {
+// // Jika ada error, kembali ke form validasi
+// return "pages/account/validate-profile";
+// }
+// String username = authentication.getName();
+// // Gunakan method updateProfile yang sudah kita modifikasi
+// userService.updateProfile(username, profileDto);
+// redirectAttributes.addFlashAttribute("successMessage", "Profil berhasil
+// dilengkapi!");
+// return "redirect:/dashboard"; // Arahkan ke halaman lihat profil setelah
+// selesai
+// }

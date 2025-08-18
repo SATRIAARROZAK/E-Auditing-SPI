@@ -17,13 +17,19 @@
     </div>
 
     <div layout:fragment="content">
+        <div th:if="${!isProfileComplete}" class="alert alert-warning" role="alert">
+            <h4 class="alert-heading"><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h4>
+            <p>Profil Anda belum lengkap. Mohon isi semua data yang diperlukan di bawah ini untuk dapat melanjutkan
+                menggunakan aplikasi.</p>
+        </div>
         <div th:if="${passwordError}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <span th:text="${passwordError}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
         <div class="card card-primary card-outline">
-            <form th:action="@{/profile/update}" th:object="${profileDto}" method="post" enctype="multipart/form-data">
+            <form class="needs-validation" th:action="@{/profile/update}" th:object="${profileDto}" method="post"
+                enctype="multipart/form-data" novalidate>
 
                 <div class="card-body box-profile">
                     <div class="row">
@@ -46,39 +52,46 @@
                                 <div class="row g-3">
                                     <!--begin::Col-->
                                     <div class="col-md-6">
-                                        <label class="form-label">Nama Lengkap</label>
+                                        <label for="fullName" class="form-label">Nama Lengkap</label>
                                         <input type="text" class="form-control" th:field="*{fullName}" id="fullName"
                                             required>
+                                        <div id="fullName" class="invalid-feedback"
+                                            th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Jabatan</label>
                                         <input type="text" class="form-control" th:field="*{position}" id="position"
                                             required>
+                                        <div id="username" class="text-danger pt-1"
+                                            th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
                                     </div>
-
                                     <div class="col-md-6">
                                         <label class="form-label">Nama Pengguna</label>
                                         <input type="text" class="form-control" th:field="*{username}" id="username"
                                             required>
+                                        <div class="text-danger pt-1" th:if="${#fields.hasErrors('username')}"
+                                            th:errors="*{username}"></div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Email</label>
                                         <input type="email" class="form-control" th:field="*{email}" id="email"
                                             required>
+                                        <div class="text-danger pt-1" th:if="${#fields.hasErrors('email')}"
+                                            th:errors="*{email}"></div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">No Telp</label>
                                         <input type="text" class="form-control" th:field="*{phoneNumber}"
                                             id="phoneNumber" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Peran</label>
-                                        <input class="form-control" th:value="${user.role}" disabled />
+                                        <div class="text-danger pt-1" th:if="${#fields.hasErrors('phoneNumber')}"
+                                            th:errors="*{phoneNumber}"></div>
                                     </div>
                                     <div class="col-md-9">
                                         <label class="form-label">Alamat</label>
-                                        <textarea class="form-control" id="address" rows="3"
-                                            th:field="*{address}"></textarea>
+                                        <textarea class="form-control" rows="3" id="address" th:field="*{address}"
+                                            required></textarea>
+                                        <div class="text-danger pt-1" th:if="${#fields.hasErrors('address')}"
+                                            th:errors="*{address}"></div>
                                     </div>
                                 </div>
                                 <div class="mt-4">
@@ -89,8 +102,9 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                        <a th:href="@{/profile/view}" class="btn btn-warning">Batal</a>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <a th:href="@{/profile/view}" class="btn btn-warning"
+                            th:classappend="${!isProfileComplete} ? 'disabled' : ''">Batal</a>
                     </div>
                 </div>
             </form>
